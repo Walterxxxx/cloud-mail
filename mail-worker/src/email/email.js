@@ -210,6 +210,26 @@ ${params.text || emailUtils.htmlToText(params.content) || ''}
 				}
 			}));
 		}
+		
+		// 转发到 Bark 服务
+		try {
+			// 准备 Bark 推送内容
+			const barkContent = encodeURIComponent(
+				`📧 新邮件: ${params.subject}\n` +
+				`发件人: ${params.name} <${params.sendEmail}>\n` +
+				`收件人: ${message.to}\n` +
+				`时间: ${dayjs.utc(emailRow.createTime).tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm')}\n` +
+				`内容: ${params.text || emailUtils.htmlToText(params.content) || ''}`
+			);
+			
+			// 调用 Bark API
+			const barkResponse = await fetch(`https://bark.lingjinglive.com/HunC1qK4yGzireTLfXaGrC/${barkContent}`);
+			if (!barkResponse.ok) {
+				console.error(`转发到 Bark 失败: 状态码=${barkResponse.status}`);
+			}
+		} catch (e) {
+			console.error('转发到 Bark 失败:', e);
+		}
 
 		if (forwardStatus === settingConst.forwardStatus.OPEN && forwardEmail) {
 
