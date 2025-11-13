@@ -12,6 +12,13 @@ import verifyUtils from '../utils/verify-utils';
 import r2Service from '../service/r2-service';
 import userService from '../service/user-service';
 import telegramService from '../service/telegram-service';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+// 配置dayjs插件
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export async function email(message, env, ctx) {
 
